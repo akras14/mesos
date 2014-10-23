@@ -214,7 +214,7 @@ var ViewModel = function() {
     /**
      * Remove app click listener
      */
-    self.removeApp = function(){
+    self.removeApp = function(vm, event){
         var appType = event.target.parentNode.id;
         var lastUsedServerForApp = getLastUsedServerFor(appType);
         if(!lastUsedServerForApp){
