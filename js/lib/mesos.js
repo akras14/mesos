@@ -2,6 +2,9 @@
 var ViewModel = function() {
     var self = this;
 
+    /**
+     * Available app types
+     */
     self.availableApps = [
         {
             appType: "Hadoop"
@@ -20,6 +23,10 @@ var ViewModel = function() {
         }
     ];
 
+    /**
+     * Constructor for Server Object.
+     * Each server keeps count of apps running on it, and can add and remove apps, if there is room.
+     */
     var BlankServer = function(){
         var self = this;
         var count = 0;
@@ -71,6 +78,11 @@ var ViewModel = function() {
         return self;
      };
 
+    /**
+     * Checks if there are servers that are available to run apps
+     * Makes sure that each server at least running one app, before
+     * running another app on same server.
+     */
     var getAvailableServer = function(){
         var servers = self.servers();
         var availableServer;
@@ -95,6 +107,9 @@ var ViewModel = function() {
         }
     };
 
+    /**
+     * Check for the last server to run a particular type of app
+     */
     var getLastUsedServerFor = function(appType){
         var servers = self.servers();
         var lastUsedServer;
@@ -119,6 +134,10 @@ var ViewModel = function() {
         }
     };
 
+    /**
+     * Adds app to an available server, if there is room.
+     * @param appType
+     */
     var addApp = function(appType){
         var availableServer = getAvailableServer();
         if(!availableServer){
@@ -132,6 +151,9 @@ var ViewModel = function() {
         return availableServer.addApp(appType);
     };
 
+    /**
+     * Initialize  the app with 4 blank servers
+     */
     self.servers = ko.observableArray([
         new BlankServer(),
         new BlankServer(),
@@ -139,6 +161,9 @@ var ViewModel = function() {
         new BlankServer()
     ]);
 
+    /**
+     * Add server click listener
+     */
     self.addServer = function(){
         if(self.servers().length >= 32) {
             swal({
@@ -152,6 +177,10 @@ var ViewModel = function() {
         self.servers.push(new BlankServer());
     };
 
+
+    /**
+     * Destroy server click listener
+     */
     self.destroyServer = function(){
         if(self.servers().length === 0) {
             swal({
@@ -173,12 +202,18 @@ var ViewModel = function() {
         return true;
     };
 
+    /**
+     * Add app click listener
+     */
     self.addApp = function(vm, event){
         var appType = event.target.parentNode.id;
         return addApp(appType);
 
     };
 
+    /**
+     * Remove app click listener
+     */
     self.removeApp = function(){
         var appType = event.target.parentNode.id;
         var lastUsedServerForApp = getLastUsedServerFor(appType);
@@ -195,4 +230,4 @@ var ViewModel = function() {
 
 };
 
-ko.applyBindings(new ViewModel()); // This makes Knockout get to work
+ko.applyBindings(new ViewModel()); //Run knockout bindings
