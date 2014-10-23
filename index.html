@@ -3,11 +3,35 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Mesos Demo</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
-<p>Add what: <input data-bind="value: addWhat" /></p>
-<h2><span data-bind="text: addWhat"></span> added!</h2>
-<script src="js/vendor/knockout-3.2.0.js"></script>
+<div>
+    <a href="javascript:void(0)" data-bind="click: addServer">Add Server</a>
+    <a href="javascript:void(0)" data-bind="click: destroyServer">Destroy</a>
+</div>
+<div class="sidebar">
+    <h2>Available Apps</h2>
+    <div  data-bind="foreach: availableApps">
+        <div data-bind="attr: { id: appType }">
+            <span data-bind="text: appType"></span>
+            <a href="javascript:void(0)" data-bind="click: $parent.addApp">+</a>
+            <a href="javascript:void(0)" data-bind="click: $parent.removeApp">-</a>
+        </div>
+    </div>
+</div>
+<div class="server-canvas">
+    <h2>Server Canvas</h2>
+    <div data-bind="foreach: servers">
+        <div class="server">
+            <span data-bind="visible: firstApp, text: firstApp"></span>
+            <span data-bind="visible: secondApp, text: secondApp"></span>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" type="text/css" href="vendor/sweet-alert/sweet-alert.css">
+<script src="vendor/sweet-alert/sweet-alert.min.js"></script>
+<script src="vendor/knockout/knockout-3.2.0.debug.js"></script>
 <script src="js/lib/mesos.js"></script>
 </body>
 </html>

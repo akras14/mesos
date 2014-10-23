@@ -1,0 +1,17 @@
+.sidebar {
+    float: left;
+    margin-right: 40px;
+}
+.server-canvas {
+    min-width: 400px;
+    width: 400px;
+    float: left;
+    overflow: auto;
+}
+.server {
+    width: 90px;
+    height: 90px;
+    margin: 3px;
+    float: left;
+    border: 1px solid grey;
+}
