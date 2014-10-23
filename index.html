@@ -24,14 +24,15 @@
     <h2>Server Canvas</h2>
     <div data-bind="foreach: servers">
         <div class="server">
-            <span data-bind="visible: firstApp, text: firstApp"></span>
-            <span data-bind="visible: secondApp, text: secondApp"></span>
+            <span data-bind="text: firstApp">Test</span><br/>
+            <span data-bind="text: secondApp"></span>
         </div>
     </div>
 </div>
 <link rel="stylesheet" type="text/css" href="vendor/sweet-alert/sweet-alert.css">
 <script src="vendor/sweet-alert/sweet-alert.min.js"></script>
 <script src="vendor/knockout/knockout-3.2.0.debug.js"></script>
+<script src="vendor/lodash/lodash.min.js"></script>
 <script src="js/lib/mesos.js"></script>
 </body>
 </html>

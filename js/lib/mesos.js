@@ -21,11 +21,90 @@ var ViewModel = function() {
     ];
 
     var BlankServer = function(){
-        return {
-            firstApp: null,
-            secondApp: null
+        var self = this;
+        var count = 0;
+        self.firstApp = ko.observable(null);
+        self.secondApp = ko.observable(null);
+        self.addApp = function(appType){
+            if(count === 0){
+                self.firstApp(appType);
+                count++;
+                return true;
+            } else if (count == 1){
+                self.secondApp(appType);
+                count++;
+                return true;
+            } else {
+                return false;
+            }
         };
-    }
+
+        self.removeApp = function(appType){
+            if(self.firstApp() == appType){
+                self.firstApp(self.secondApp());
+                self.secondApp(null);
+                count--;
+            } else if(self.secondApp() == appType) {
+                self.secondApp(null);
+                count--;
+            } else {
+                throw new Error("Trying to remove app that wasn't on the server");
+            }
+            return true;
+        };
+        self.getCount = function(){
+            return count;
+        };
+        return self;
+     };
+
+    var getAvailableServer = function(){
+        var servers = self.servers();
+        var availableServer;
+
+        availableServer = _.find(servers, function(server){
+            return server.getCount() === 0;
+        });
+
+        if(availableServer) {
+            return availableServer;
+        }
+
+        //Else no empty servers found, get one with only 1 app running
+        availableServer = _.find(servers, function(server){
+            return server.getCount() == 1;
+        });
+
+        if(availableServer) {
+            return availableServer;
+        } else { //Looks like all servers are already running 2 apps each
+            return false;
+        }
+    };
+
+    var getLastUsedServerFor = function(appType){
+        var servers = self.servers();
+        var lastUsedServer;
+
+        lastUsedServer = _.findLast(servers, function(server){
+            return server.secondApp() == appType;
+        });
+
+        if(lastUsedServer){
+            return lastUsedServer;
+        }
+
+        //Else no secondary app was found, check for primary
+        lastUsedServer = _.findLast(servers, function(server){
+            return server.firstApp() == appType;
+        });
+
+        if(lastUsedServer) {
+            return lastUsedServer;
+        } else { //No apps was found
+            return false;
+        }
+    };
 
     self.servers = ko.observableArray([
         new BlankServer(),
@@ -42,33 +121,50 @@ var ViewModel = function() {
                     "\nTry removing some servers or apps instead!",
                 type: "warning"
             });
-            return;
+            return true;
         }
         self.servers.push(new BlankServer());
     };
 
     self.destroyServer = function(){
-        if(self.servers().length == 0) {
+        if(self.servers().length === 0) {
             swal({
                 title: "Uh oh...",
                 text: "There are no more servers to Destroy!\n Try adding more servers first.",
                 type: "warning"
             });
-            return;
+            return true;
         }
         self.servers.pop();
     };
 
     self.addApp = function(vm, event){
+        var availableServer = getAvailableServer();
+        if(!availableServer){
+            swal({
+                title: "Uh Oh... No room for this app",
+                text: "Looks like all servers are taken.\nTry adding more servers or removing some apps",
+                type: "error"
+            });
+            return false;
+        }
         var appType = event.target.parentNode.id;
-        console.log(appType);
+        return availableServer.addApp(appType);
     };
 
     self.removeApp = function(){
         var appType = event.target.parentNode.id;
-        console.log(appType);
+        var lastUsedServerForApp = getLastUsedServerFor(appType);
+        if(!lastUsedServerForApp){
+            swal({
+                title: "Uh Oh... No such app is running",
+                text: "You tried to kill an app that is not currently running.\nTry running some apps first",
+                type: "error"
+            });
+            return false;
+        }
+        return lastUsedServerForApp.removeApp(appType);
     };
-
 
 };
 
