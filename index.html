@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <title>Mesos Demo</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
-<div>
-    <a href="javascript:void(0)" data-bind="click: addServer">Add Server</a>
-    <a href="javascript:void(0)" data-bind="click: destroyServer">Destroy</a>
-</div>
 <div class="sidebar">
+    <div class="server-control">
+        <a class="add-server" href="javascript:void(0)" data-bind="click: addServer">
+            <div><i class="fa fa-plus-circle fa-4x"></i></div>
+            <div>Add Server</div>
+        </a>
+        <a class="destroy-server" href="javascript:void(0)" data-bind="click: destroyServer">
+            <div><i class="fa fa-minus-circle fa-4x"></i></div>
+            <div>Destroy</div>
+        </a>
+    </div>
     <h2>Available Apps</h2>
     <div  data-bind="foreach: availableApps">
         <div data-bind="attr: { id: appType }">

@@ -2,6 +2,20 @@
     float: left;
     margin-right: 40px;
 }
+.server-control {
+    height: 100px;
+}
+.add-server, .destroy-server{
+    float: left;
+    width: 100px;
+    color: black;
+    text-decoration: none;
+    text-align: center
+}
+
+.add-server i, .destroy-server i{
+    text-align: center;
+}
 .server-canvas {
     min-width: 400px;
     width: 400px;
