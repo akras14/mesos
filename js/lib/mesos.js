@@ -52,6 +52,19 @@ var ViewModel = function() {
             }
             return true;
         };
+
+        self.getApps = function(){
+            if(count === 0){
+                return [];
+            } else if (count === 1){
+                return [self.firstApp()];
+            } else if (count === 2) {
+                return [self.firstApp(), self.secondApp()];
+            } else {
+                throw new Error("BlankServer count is invalid");
+            }
+
+        };
         self.getCount = function(){
             return count;
         };
@@ -106,6 +119,19 @@ var ViewModel = function() {
         }
     };
 
+    var addApp = function(appType){
+        var availableServer = getAvailableServer();
+        if(!availableServer){
+            swal({
+                title: "Uh Oh... No room for new apps",
+                text: "Looks like all servers are taken.\nTry adding more servers or removing some apps.",
+                type: "error"
+            });
+            return false;
+        }
+        return availableServer.addApp(appType);
+    };
+
     self.servers = ko.observableArray([
         new BlankServer(),
         new BlankServer(),
@@ -135,21 +161,22 @@ var ViewModel = function() {
             });
             return true;
         }
-        self.servers.pop();
+        var server = self.servers.pop();
+
+        if(server.getCount() > 0){ //Need to remove apps
+            var apps = server.getApps();
+            _.each(apps, function(app){
+                addApp(app);
+            });
+        }
+
+        return true;
     };
 
     self.addApp = function(vm, event){
-        var availableServer = getAvailableServer();
-        if(!availableServer){
-            swal({
-                title: "Uh Oh... No room for this app",
-                text: "Looks like all servers are taken.\nTry adding more servers or removing some apps",
-                type: "error"
-            });
-            return false;
-        }
         var appType = event.target.parentNode.id;
-        return availableServer.addApp(appType);
+        return addApp(appType);
+
     };
 
     self.removeApp = function(){
