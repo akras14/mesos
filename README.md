@@ -1,7 +1,7 @@
 # mesos
 
 ## Demo
-[http://akras14.github.io/mesos/]()
+[http://akras14.github.io/mesos/](http://akras14.github.io/mesos/index.html)
 
 ## Getting Started
 Simple open `index.html` in your favorite (modern) browser of choice. 
